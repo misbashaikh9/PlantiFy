@@ -6,12 +6,21 @@ import '../styles/Store.css';
 const Store = () => {
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
-  const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
-  const [isLoading, setIsLoading] = useState(true);
+  const [scrollPosition, setScrollPosition] = useState(0);
 
-  // Sample product data (replace with API call later)
+  // Add scroll event listener
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrollPosition(window.scrollY);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Sample product data
   useEffect(() => {
     const sampleProducts = [
       {
@@ -73,23 +82,74 @@ const Store = () => {
         description: "Natural plant food for healthy growth",
         inStock: true,
         rating: 4.4
+      },
+      {
+        id: 7,
+        name: "Fiddle Leaf Fig",
+        category: "indoor",
+        price: 39.99,
+        image: "🌳",
+        description: "Stunning large-leaf plant for statement decor",
+        inStock: true,
+        rating: 4.9
+      },
+      {
+        id: 8,
+        name: "Cactus Mix",
+        category: "succulents",
+        price: 22.99,
+        image: "🌵",
+        description: "Collection of 3 unique cactus varieties",
+        inStock: true,
+        rating: 4.7
+      },
+      {
+        id: 9,
+        name: "Pothos Golden",
+        category: "indoor",
+        price: 18.99,
+        image: "🌿",
+        description: "Trailing vine plant perfect for hanging baskets",
+        inStock: true,
+        rating: 4.6
+      },
+      {
+        id: 10,
+        name: "Aloe Vera",
+        category: "succulents",
+        price: 16.99,
+        image: "🌱",
+        description: "Medicinal plant with soothing gel properties",
+        inStock: true,
+        rating: 4.8
+      },
+      {
+        id: 11,
+        name: "ZZ Plant",
+        category: "indoor",
+        price: 32.99,
+        image: "🌿",
+        description: "Ultra-low maintenance plant for any space",
+        inStock: true,
+        rating: 4.7
+      },
+      {
+        id: 12,
+        name: "Plant Mister",
+        category: "accessories",
+        price: 12.99,
+        image: "💧",
+        description: "Fine mist sprayer for tropical plants",
+        inStock: true,
+        rating: 4.5
       }
-    ];
-
-    const sampleCategories = [
-      { id: 'all', name: 'All Products', count: sampleProducts.length },
-      { id: 'indoor', name: 'Indoor Plants', count: sampleProducts.filter(p => p.category === 'indoor').length },
-      { id: 'succulents', name: 'Succulents', count: sampleProducts.filter(p => p.category === 'succulents').length },
-      { id: 'accessories', name: 'Accessories', count: sampleProducts.filter(p => p.category === 'accessories').length }
     ];
 
     setProducts(sampleProducts);
     setFilteredProducts(sampleProducts);
-    setCategories(sampleCategories);
-    setIsLoading(false);
   }, []);
 
-  // Filter products by category and search
+  // Filter products
   useEffect(() => {
     let filtered = products;
 
@@ -108,85 +168,125 @@ const Store = () => {
   }, [products, selectedCategory, searchQuery]);
 
   const handleAddToCart = (product) => {
-    // TODO: Implement cart functionality
     console.log('Added to cart:', product);
-    // Show success message
     alert(`${product.name} added to cart!`);
   };
 
-  if (isLoading) {
-    return (
-      <div className="store-container">
-        <div className="loading">Loading store...</div>
-      </div>
-    );
-  }
-
   return (
-    <div className="store-container">
+    <div className="store-page">
       <Header />
       
       <main className="store-main">
-        <div className="store-header">
-          <h1>🌿 Plant Store</h1>
-          <p>Discover beautiful plants and gardening essentials</p>
-        </div>
-
-        {/* Search and Filters */}
-        <div className="store-controls">
-          <div className="search-bar">
-            <input
-              type="text"
-              placeholder="Search plants, accessories..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="search-input"
-            />
-            <span className="search-icon">🔍</span>
+        {/* Hero Section */}
+        <section className="hero-section">
+          <div className="hero-content">
+            <h1>🌿 Plant Store</h1>
+            <p>Discover beautiful plants and gardening essentials for your home</p>
+            <div style={{ marginTop: '20px', fontSize: '1rem', opacity: 0.8 }}>
+              Scroll Position: {scrollPosition}px
+            </div>
+            <button 
+              onClick={() => window.scrollTo({ top: 1000, behavior: 'smooth' })}
+              style={{ 
+                marginTop: '15px', 
+                padding: '10px 20px', 
+                background: 'white', 
+                color: '#4CAF50', 
+                border: 'none', 
+                borderRadius: '25px',
+                cursor: 'pointer',
+                fontSize: '1rem'
+              }}
+            >
+              Test Scroll Down
+            </button>
           </div>
+        </section>
 
-          <div className="category-filters">
-            {categories.map(category => (
-              <button
-                key={category.id}
-                className={`category-btn ${selectedCategory === category.id ? 'active' : ''}`}
-                onClick={() => setSelectedCategory(category.id)}
-              >
-                {category.name} ({category.count})
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Products Grid */}
-        <div className="products-grid">
-          {filteredProducts.length > 0 ? (
-            filteredProducts.map(product => (
-              <ProductCard
-                key={product.id}
-                product={product}
-                onAddToCart={handleAddToCart}
+        {/* Filter Bar */}
+        <section className="filter-section">
+          <div className="filter-container">
+            <div className="search-container">
+              <input
+                type="text"
+                placeholder="Search plants, accessories..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="search-input"
               />
-            ))
-          ) : (
-            <div className="no-products">
-              <p>No products found matching your criteria.</p>
-              <button 
-                className="clear-filters-btn"
-                onClick={() => {
-                  setSelectedCategory('all');
-                  setSearchQuery('');
-                }}
+              <span className="search-icon">🔍</span>
+            </div>
+
+            <div className="category-filters">
+              <button
+                className={`category-btn ${selectedCategory === 'all' ? 'active' : ''}`}
+                onClick={() => setSelectedCategory('all')}
               >
-                Clear Filters
+                All Products
+              </button>
+              <button
+                className={`category-btn ${selectedCategory === 'indoor' ? 'active' : ''}`}
+                onClick={() => setSelectedCategory('indoor')}
+              >
+                Indoor Plants
+              </button>
+              <button
+                className={`category-btn ${selectedCategory === 'succulents' ? 'active' : ''}`}
+                onClick={() => setSelectedCategory('succulents')}
+              >
+                Succulents
+              </button>
+              <button
+                className={`category-btn ${selectedCategory === 'accessories' ? 'active' : ''}`}
+                onClick={() => setSelectedCategory('accessories')}
+              >
+                Accessories
               </button>
             </div>
-          )}
-        </div>
+          </div>
+        </section>
 
-        {/* Results Count */}
-        <div className="results-info">
-          <p>Showing {filteredProducts.length} of {products.length} products</p>
+        {/* Product Grid */}
+        <section className="products-section">
+          <div className="products-container">
+            {filteredProducts.length > 0 ? (
+              <div className="products-grid">
+                {filteredProducts.map(product => (
+                  <ProductCard
+                    key={product.id}
+                    product={product}
+                    onAddToCart={handleAddToCart}
+                  />
+                ))}
+              </div>
+            ) : (
+              <div className="no-products">
+                <p>No products found matching your criteria.</p>
+                <button 
+                  className="clear-filters-btn"
+                  onClick={() => {
+                    setSelectedCategory('all');
+                    setSearchQuery('');
+                  }}
+                >
+                  Clear Filters
+                </button>
+              </div>
+            )}
+          </div>
+        </section>
+
+        {/* Footer */}
+        <footer className="store-footer">
+          <div className="footer-content">
+            <p>&copy; 2024 PlantiFy. All rights reserved.</p>
+            <p>Showing {filteredProducts.length} of {products.length} products</p>
+          </div>
+        </footer>
+
+        {/* Test section to force scrolling */}
+        <div className="scroll-test">
+          <div>Scroll Test Section</div>
         </div>
       </main>
     </div>
