@@ -1,0 +1,508 @@
+/* Reset and Base */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Remove all scrollbars */
+html, body {
+  overflow: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+html::-webkit-scrollbar, 
+body::-webkit-scrollbar {
+  display: none;
+}
+
+/* Main Container - Full Screen Desktop */
+.signup-container {
+  height: 100vh;
+  width: 100vw;
+  background: #f5f5f5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Main Signup Modal - Two Column Layout */
+.signup-modal {
+  background: white;
+  border-radius: 12px;
+  width: 1000px;
+  height: 700px;
+  max-width: 1000px;
+  max-height: 700px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+  position: relative;
+  z-index: 10;
+  display: flex;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+/* Hover Effects for the Modal */
+.signup-modal:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.25);
+}
+
+.signup-modal:hover .left-panel {
+  background: linear-gradient(135deg, #45a049, #388e3c);
+}
+
+.signup-modal:hover .signup-btn {
+  background: #45a049;
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(76, 175, 80, 0.4);
+}
+
+/* Left Panel - Green */
+.left-panel {
+  background: linear-gradient(135deg, #4CAF50, #45a049);
+  width: 50%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  padding: 60px;
+}
+
+.left-content {
+  text-align: center;
+  color: white;
+  z-index: 2;
+  position: relative;
+}
+
+.signup-title {
+  font-size: 3rem;
+  font-weight: 700;
+  margin-bottom: 20px;
+  color: white;
+  transition: all 0.3s ease;
+}
+
+.signup-subtitle {
+  font-size: 1.3rem;
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 400;
+  margin-bottom: 60px;
+  transition: all 0.3s ease;
+}
+
+/* Hover effects for left panel content */
+.signup-modal:hover .signup-title {
+  transform: scale(1.05);
+}
+
+.signup-modal:hover .signup-subtitle {
+  color: rgba(255, 255, 255, 1);
+}
+
+/* Decorative Circles */
+.decorative-circles {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.circle {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+}
+
+.circle-1 {
+  width: 120px;
+  height: 120px;
+  top: 20%;
+  left: 10%;
+}
+
+.circle-2 {
+  width: 80px;
+  height: 80px;
+  top: 60%;
+  right: 15%;
+}
+
+.circle-3 {
+  width: 60px;
+  height: 60px;
+  bottom: 20%;
+  left: 20%;
+}
+
+/* Hover effects for circles */
+.signup-modal:hover .circle {
+  background: rgba(255, 255, 255, 0.15);
+  transform: scale(1.1);
+}
+
+.signup-modal:hover .circle-1 {
+  transform: scale(1.1) translate(-5px, -5px);
+}
+
+.signup-modal:hover .circle-2 {
+  transform: scale(1.1) translate(5px, 5px);
+}
+
+.signup-modal:hover .circle-3 {
+  transform: scale(1.1) translate(-3px, 3px);
+}
+
+/* Logo Icon */
+.logo-icon {
+  position: relative;
+  width: 100px;
+  height: 100px;
+  margin: 0 auto;
+  transition: all 0.3s ease;
+}
+
+.icon-ring {
+  position: absolute;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.icon-ring.outer {
+  width: 100px;
+  height: 100px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  top: 0;
+  left: 0;
+}
+
+.icon-ring.inner {
+  width: 75px;
+  height: 75px;
+  top: 12.5px;
+  left: 12.5px;
+  position: relative;
+}
+
+.icon-segment {
+  position: absolute;
+  width: 50%;
+  height: 50%;
+  transform-origin: 100% 100%;
+  transition: all 0.3s ease;
+}
+
+.icon-segment.red {
+  background: #ff6b6b;
+  border-radius: 60px 0 0 0;
+  transform: rotate(0deg);
+}
+
+.icon-segment.yellow {
+  background: #feca57;
+  border-radius: 0 60px 0 0;
+  transform: rotate(90deg);
+}
+
+.icon-segment.green {
+  background: #48dbfb;
+  border-radius: 0 0 60px 0;
+  transform: rotate(180deg);
+}
+
+.icon-segment.blue {
+  background: #5f27cd;
+  border-radius: 0 0 0 60px;
+  transform: rotate(270deg);
+}
+
+.icon-check {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #5f27cd;
+  font-size: 24px;
+  font-weight: bold;
+  z-index: 3;
+  transition: all 0.3s ease;
+}
+
+/* Hover effects for logo icon */
+.signup-modal:hover .logo-icon {
+  transform: scale(1.1) rotate(5deg);
+}
+
+.signup-modal:hover .icon-ring.outer {
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.signup-modal:hover .icon-check {
+  transform: translate(-50%, -50%) scale(1.2);
+  color: #6c5ce7;
+}
+
+/* Right Panel - White Form */
+.right-panel {
+  background: white;
+  width: 50%;
+  height: 100%;
+  padding: 70px 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.signup-form {
+  width: 100%;
+}
+
+.form-group {
+  margin-bottom: 40px;
+  transition: all 0.3s ease;
+}
+
+.form-group:first-child {
+  margin-top: 30px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 16px;
+  color: #333;
+  font-weight: 600;
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 18px 0;
+  border: none;
+  border-bottom: 2px solid #e0e0e0;
+  font-size: 1.1rem;
+  transition: all 0.3s ease;
+  background: transparent;
+  color: #333;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-bottom-color: #4CAF50;
+}
+
+.form-group input::placeholder {
+  color: #999;
+}
+
+.form-group input.error {
+  border-bottom-color: #e74c3c;
+}
+
+/* Hover effects for form elements */
+.signup-modal:hover .form-group label {
+  color: #4CAF50;
+}
+
+.signup-modal:hover .form-group input {
+  border-bottom-color: #4CAF50;
+}
+
+/* Password Input with Validation Check */
+.password-input {
+  position: relative;
+}
+
+.validation-check {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #4CAF50;
+  font-size: 18px;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+/* Hover effects for validation check */
+.signup-modal:hover .validation-check {
+  transform: translateY(-50%) scale(1.2);
+}
+
+/* Form Actions */
+.form-actions {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  transition: all 0.3s ease;
+  margin-top: 40px;
+}
+
+.signup-btn {
+  padding: 18px 40px;
+  background: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.signup-btn:hover {
+  background: #45a049;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(76, 175, 80, 0.3);
+}
+
+.or-text {
+  color: #999;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.login-link {
+  color: #666;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease;
+  font-size: 1rem;
+}
+
+.login-link:hover {
+  color: #333;
+  text-decoration: underline;
+}
+
+/* Hover effects for form actions */
+.signup-modal:hover .or-text {
+  color: #4CAF50;
+}
+
+.signup-modal:hover .login-link {
+  color: #4CAF50;
+}
+
+/* Error Messages */
+.error-message {
+  color: #e74c3c;
+  font-size: 0.8rem;
+  margin-top: 4px;
+  display: block;
+}
+
+/* Responsive Design - Desktop First */
+@media (max-width: 768px) {
+  .signup-modal {
+    width: 90%;
+    height: auto;
+    max-width: 90%;
+    max-height: none;
+    flex-direction: column;
+  }
+  
+  .left-panel {
+    width: 100%;
+    height: 200px;
+    padding: 20px;
+  }
+  
+  .right-panel {
+    width: 100%;
+    padding: 30px;
+  }
+  
+  .signup-title {
+    font-size: 2rem;
+  }
+  
+  .signup-subtitle {
+    font-size: 1rem;
+    margin-bottom: 30px;
+  }
+  
+  .logo-icon {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .icon-ring.outer {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .icon-ring.inner {
+    width: 45px;
+    height: 45px;
+    top: 7.5px;
+    left: 7.5px;
+  }
+  
+  .icon-check {
+    font-size: 18px;
+  }
+  
+  /* Disable hover effects on mobile */
+  .signup-modal:hover {
+    transform: none;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+  }
+  
+  .signup-modal:hover .left-panel {
+    background: linear-gradient(135deg, #4CAF50, #45a049);
+  }
+}
+
+@media (max-width: 480px) {
+  .signup-container {
+    padding: 20px;
+  }
+  
+  .signup-modal {
+    width: 100%;
+    max-width: 100%;
+    border-radius: 8px;
+  }
+  
+  .left-panel {
+    height: 150px;
+    padding: 15px;
+  }
+  
+  .right-panel {
+    padding: 20px;
+  }
+  
+  .signup-title {
+    font-size: 1.75rem;
+  }
+  
+  .signup-subtitle {
+    font-size: 0.9rem;
+    margin-bottom: 20px;
+  }
+  
+  .form-actions {
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .signup-btn {
+    width: 100%;
+  }
+}

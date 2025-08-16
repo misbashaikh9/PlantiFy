@@ -1,0 +1,162 @@
+/* Store Container */
+.store-container {
+  min-height: 100vh;
+  width: 100vw;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  overflow-y: auto;
+}
+
+/* Store Main Content */
+.store-main {
+  width: 100%;
+  margin: 0;
+  padding: 40px 60px 60px 60px;
+}
+
+/* Store Header */
+.store-header {
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.store-header h1 {
+  font-size: 3rem;
+  font-weight: 700;
+  color: #2c3e50;
+  margin-bottom: 15px;
+}
+
+.store-header p {
+  font-size: 1.2rem;
+  color: #5a6c7d;
+  margin: 0;
+}
+
+/* Store Controls */
+.store-controls {
+  margin-bottom: 40px;
+}
+
+/* Search Bar */
+.search-bar {
+  position: relative;
+  max-width: 500px;
+  margin: 0 auto 30px auto;
+}
+
+.search-input {
+  width: 100%;
+  padding: 15px 50px 15px 20px;
+  border: 2px solid #e1e8ed;
+  border-radius: 25px;
+  font-size: 1rem;
+  background: white;
+  transition: all 0.3s ease;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #4CAF50;
+  box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+}
+
+.search-icon {
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.2rem;
+  color: #95a5a6;
+}
+
+/* Category Filters */
+.category-filters {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.category-btn {
+  padding: 12px 24px;
+  border: 2px solid #e1e8ed;
+  border-radius: 25px;
+  background: white;
+  color: #5a6c7d;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.category-btn:hover {
+  border-color: #4CAF50;
+  color: #4CAF50;
+  transform: translateY(-2px);
+}
+
+.category-btn.active {
+  background: #4CAF50;
+  border-color: #4CAF50;
+  color: white;
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+}
+
+/* Products Grid - FIXED COLUMNS ONLY */
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 40px;
+  margin-bottom: 40px;
+  width: 100%;
+}
+
+/* No Products */
+.no-products {
+  text-align: center;
+  padding: 60px 20px;
+  grid-column: 1 / -1;
+}
+
+.no-products p {
+  font-size: 1.2rem;
+  color: #5a6c7d;
+  margin-bottom: 20px;
+}
+
+.clear-filters-btn {
+  padding: 12px 24px;
+  border: 2px solid #4CAF50;
+  border-radius: 25px;
+  background: #4CAF50;
+  color: white;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.clear-filters-btn:hover {
+  background: #45a049;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+}
+
+/* Results Info */
+.results-info {
+  text-align: center;
+  padding: 20px;
+  color: #5a6c7d;
+  font-size: 0.95rem;
+}
+
+/* Loading State */
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  font-size: 1.5rem;
+  color: #5a6c7d;
+}
+
