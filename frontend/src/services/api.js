@@ -11,7 +11,7 @@ const api = axios.create({
 // Request interceptor to add auth token
 api.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('authToken');
+    const token = localStorage.getItem('token');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -22,13 +22,41 @@ api.interceptors.request.use(
   }
 );
 
-// Response interceptor to handle errors
+// Response interceptor to handle errors and token refresh
 api.interceptors.response.use(
   (response) => response,
-  (error) => {
+  async (error) => {
     if (error.response?.status === 401) {
-      // Unauthorized - clear token and redirect to login
-      localStorage.removeItem('authToken');
+      // Try to refresh the token
+      const refreshToken = localStorage.getItem('refresh_token');
+      if (refreshToken) {
+        try {
+          const refreshResponse = await fetch('http://localhost:8000/plant_store/api/token/refresh/', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ refresh_token: refreshToken })
+          });
+          
+          if (refreshResponse.ok) {
+            const refreshData = await refreshResponse.json();
+            localStorage.setItem('token', refreshData.access_token);
+            
+            // Retry the original request with new token
+            const originalRequest = error.config;
+            originalRequest.headers.Authorization = `Bearer ${refreshData.access_token}`;
+            return api(originalRequest);
+          }
+        } catch (refreshError) {
+          console.error('Token refresh failed:', refreshError);
+        }
+      }
+      
+      // If refresh fails, clear tokens and redirect to login
+      localStorage.removeItem('token');
+      localStorage.removeItem('refresh_token');
+      localStorage.removeItem('user');
       window.location.href = '/signin';
     }
     return Promise.reject(error);
@@ -111,6 +139,18 @@ export const orderAPI = {
     const response = await api.get(`/orders/${orderId}/`);
     return response.data;
   },
+};
+
+// Suggestions API calls
+export const suggestionAPI = {
+  list: async () => {
+    const response = await api.get('/suggestions/');
+    return response.data;
+  },
+  create: async (content) => {
+    const response = await api.post('/suggestions/', { content });
+    return response.data;
+  }
 };
 
 export default api;

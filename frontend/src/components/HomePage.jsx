@@ -23,13 +23,11 @@ const HomePage = () => {
   };
 
   const handleViewOrders = () => {
-    // TODO: Navigate to orders page when built
-    alert('Orders page coming soon! 📋');
+    navigate('/orders');
   };
 
   const handleMyProfile = () => {
-    // TODO: Navigate to profile page when built
-    alert('Profile page coming soon! 👤');
+    navigate('/profile');
   };
 
   if (isLoading) {
@@ -64,6 +62,39 @@ const HomePage = () => {
             <button className="action-btn secondary" onClick={handleMyProfile}>
               My Profile
             </button>
+          </div>
+        </div>
+
+        {/* Magazine Box */}
+        <div className="magazine-section">
+          <h2>🌱 Plant Care Magazine</h2>
+          <p>Click the box below to explore plant care tips and fertilizer guides</p>
+          
+          <div className="big-magazine-box" onClick={() => navigate('/magazine')}>
+            <div className="box-content">
+              <div className="magazine-icon">📚</div>
+              <h3>Plant Care & Fertilizer Guide</h3>
+              <p>Comprehensive tips, seasonal care, and fertilizer information</p>
+              <div className="click-hint">Click to explore →</div>
+            </div>
+          </div>
+        </div>
+
+        {/* Share Your Thoughts Box */}
+        <div className="magazine-section">
+          <h2>💬 Community Corner</h2>
+          <p>Share your thoughts and read other customers' experiences</p>
+          
+          <div
+            className="big-suggestion-box"
+            onClick={() => navigate('/suggestions')}
+          >
+            <div className="box-content">
+              <div className="magazine-icon">🗨️</div>
+              <h3>Share Your Thoughts</h3>
+              <p>Post your tips, ask questions, and learn from fellow plant lovers</p>
+              <div className="click-hint">Join the conversation →</div>
+            </div>
           </div>
         </div>
       </main>

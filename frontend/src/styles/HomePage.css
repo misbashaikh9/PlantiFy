@@ -151,3 +151,222 @@
   font-size: 1.5rem;
   color: #5a6c7d;
 }
+
+/* Magazine Section */
+.magazine-section {
+  width: 100%;
+  max-width: 100%;
+  margin: 60px 0;
+  padding: 0 0;
+}
+
+.magazine-section h2 {
+  text-align: center;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #2c3e50;
+  margin-bottom: 15px;
+}
+
+.magazine-section > p {
+  text-align: center;
+  font-size: 1.2rem;
+  color: #5a6c7d;
+  margin-bottom: 30px;
+}
+
+/* Big Magazine Box */
+.big-magazine-box {
+  background: linear-gradient(135deg, #4CAF50 0%, #45a049 50%, #2E7D32 100%);
+  border-radius: 18px;
+  padding: 60px;
+  text-align: center;
+  color: white;
+  cursor: pointer;
+  transition: all 0.4s ease;
+  box-shadow: 0 15px 40px rgba(76, 175, 80, 0.3);
+  border: 3px solid transparent;
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  min-height: 320px; /* rectangular */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.big-magazine-box::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, #66BB6A 0%, #4CAF50 50%, #388E3C 100%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  z-index: 1;
+}
+
+.big-magazine-box:hover::before {
+  opacity: 1;
+}
+
+.big-magazine-box:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 25px 60px rgba(76, 175, 80, 0.4);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.big-magazine-box:active {
+  transform: translateY(-4px);
+}
+
+.big-magazine-box > * {
+  position: relative;
+  z-index: 2;
+}
+
+.magazine-icon {
+  font-size: 4rem;
+  margin-bottom: 20px;
+  display: block;
+}
+
+.big-magazine-box h3 {
+  font-size: 2.2rem;
+  font-weight: 700;
+  margin-bottom: 15px;
+  color: white;
+}
+
+.big-magazine-box p {
+  font-size: 1.3rem;
+  margin-bottom: 30px;
+  opacity: 0.9;
+  line-height: 1.6;
+}
+
+.click-hint {
+  font-size: 1.1rem;
+  font-weight: 600;
+  opacity: 0.8;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 12px 24px;
+  border-radius: 25px;
+  display: inline-block;
+  transition: all 0.3s ease;
+}
+
+.big-magazine-box:hover .click-hint {
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(1.05);
+}
+
+/* Big Suggestion Box */
+.big-suggestion-box {
+  background: linear-gradient(135deg, #6a5acd 0%, #7e57c2 40%, #3949ab 100%);
+  border-radius: 18px;
+  padding: 60px;
+  text-align: center;
+  color: white;
+  cursor: pointer;
+  transition: all 0.4s ease;
+  box-shadow: 0 15px 40px rgba(106, 90, 205, 0.3);
+  border: 3px solid transparent;
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  min-height: 320px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.big-suggestion-box::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, #8e79ff 0%, #7c6be6 40%, #536dfe 100%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  z-index: 1;
+}
+
+.big-suggestion-box:hover::before {
+  opacity: 1;
+}
+
+.big-suggestion-box:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 25px 60px rgba(106, 90, 205, 0.4);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.big-suggestion-box > * {
+  position: relative;
+  z-index: 2;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .big-magazine-box {
+    padding: 50px;
+    min-height: 280px;
+  }
+  .big-suggestion-box {
+    padding: 50px;
+    min-height: 280px;
+  }
+}
+
+@media (max-width: 768px) {
+  .magazine-section h2 {
+    font-size: 2rem;
+  }
+  
+  .big-magazine-box {
+    padding: 40px 24px;
+    min-height: 240px;
+  }
+  
+  .big-magazine-box h3 {
+    font-size: 1.8rem;
+  }
+  
+  .big-magazine-box p {
+    font-size: 1.1rem;
+  }
+  
+  .magazine-icon {
+    font-size: 3rem;
+  }
+  .big-suggestion-box {
+    padding: 40px 24px;
+    min-height: 240px;
+  }
+}
+
+@media (max-width: 480px) {
+  .magazine-section {
+    padding: 0 10px;
+    margin: 40px 0;
+  }
+  
+  .big-magazine-box {
+    padding: 30px 16px;
+    min-height: 200px;
+  }
+  
+  .big-magazine-box h3 {
+    font-size: 1.5rem;
+  }
+  
+  .big-magazine-box p {
+    font-size: 1rem;
+  }
+  .big-suggestion-box {
+    padding: 30px 16px;
+    min-height: 200px;
+  }
+}
