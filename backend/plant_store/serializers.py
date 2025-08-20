@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from .models import UserProfile, Category, Product, Cart, CartItem, Order, OrderItem, UserAddress, ContactMessage, CustomerSuggestion
+from .models import UserProfile, Category, Product, Cart, CartItem, Order, OrderItem, UserAddress, ContactMessage, CustomerSuggestion, Comment
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
@@ -54,7 +54,11 @@ class ProductSerializer(serializers.ModelSerializer):
 class CartItemSerializer(serializers.ModelSerializer):
 	"""Serializer for CartItem model"""
 	product = ProductSerializer(read_only=True)
-	total_price = serializers.ReadOnlyField()
+	total_price = serializers.SerializerMethodField()
+	
+	def get_total_price(self, obj):
+		"""Calculate total price for cart item"""
+		return obj.get_total_price()
 	
 	class Meta:
 		model = CartItem
@@ -77,8 +81,14 @@ class OrderItemSerializer(serializers.ModelSerializer):
 	"""Serializer for OrderItem model"""
 	product = ProductSerializer(read_only=True)
 	product_name = serializers.CharField(source='product.name', read_only=True)
-	product_image = serializers.CharField(source='product.image.url', read_only=True)
+	product_image = serializers.SerializerMethodField()
 	product_category = serializers.CharField(source='product.category.name', read_only=True)
+	
+	def get_product_image(self, obj):
+		"""Safely get product image URL"""
+		if obj.product and obj.product.image:
+			return obj.product.image.url
+		return None
 	
 	class Meta:
 		model = OrderItem
@@ -134,11 +144,21 @@ class ContactMessageSerializer(serializers.ModelSerializer):
 		return value
 
 
-class CustomerSuggestionSerializer(serializers.ModelSerializer):
+class CommentSerializer(serializers.ModelSerializer):
 	user = UserSerializer(read_only=True)
 	
 	class Meta:
+		model = Comment
+		fields = ['id', 'user', 'content', 'created_at', 'updated_at', 'parent_comment', 'likes', 'dislikes']
+		read_only_fields = ['id', 'created_at', 'updated_at']
+
+
+class CustomerSuggestionSerializer(serializers.ModelSerializer):
+	user = UserSerializer(read_only=True)
+	comments = CommentSerializer(many=True, read_only=True)
+	
+	class Meta:
 		model = CustomerSuggestion
-		fields = ['id', 'user', 'content', 'created_at', 'updated_at', 'is_public']
+		fields = ['id', 'user', 'content', 'created_at', 'updated_at', 'is_public', 'likes', 'dislikes', 'comments']
 		read_only_fields = ['id', 'created_at', 'updated_at']
 

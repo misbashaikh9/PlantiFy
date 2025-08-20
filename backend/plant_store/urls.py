@@ -29,6 +29,12 @@ urlpatterns = [
 	
 	# Customer Suggestions
 	path('api/suggestions/', views.CustomerSuggestionListCreateView.as_view(), name='suggestions_list_create'),
+	path('api/suggestions/<int:suggestion_id>/like/', views.SuggestionLikeDislikeView.as_view(), name='suggestion_like_dislike'),
+	path('api/suggestions/<int:suggestion_id>/comments/', views.CommentCreateView.as_view(), name='comment_create'),
+	
+	# Comments
+	path('api/comments/<int:comment_id>/like/', views.CommentLikeDislikeView.as_view(), name='comment_like_dislike'),
+	path('api/comments/<int:comment_id>/replies/', views.CommentCreateView.as_view(), name='comment_reply'),
 
 	# User Addresses
 	path('api/addresses/', views.UserAddressListView.as_view(), name='address_list'),

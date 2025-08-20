@@ -1,0 +1,184 @@
+{
+  "plant_care": [
+    {
+      "plant_type": "Monstera",
+      "environment": "indoor",
+      "light_level": "bright_indirect",
+      "humidity": "high",
+      "temperature": "warm",
+      "soil_type": "well_draining",
+      "watering_frequency": "weekly",
+      "fertilizer_frequency": "monthly",
+      "success_rate": 0.95
+    },
+    {
+      "plant_type": "Monstera",
+      "environment": "indoor",
+      "light_level": "low",
+      "humidity": "low",
+      "temperature": "cool",
+      "soil_type": "heavy",
+      "watering_frequency": "weekly",
+      "fertilizer_frequency": "monthly",
+      "success_rate": 0.45
+    },
+    {
+      "plant_type": "Snake Plant",
+      "environment": "indoor",
+      "light_level": "low",
+      "humidity": "low",
+      "temperature": "cool",
+      "soil_type": "well_draining",
+      "watering_frequency": "monthly",
+      "fertilizer_frequency": "quarterly",
+      "success_rate": 0.9
+    },
+    {
+      "plant_type": "Snake Plant",
+      "environment": "indoor",
+      "light_level": "bright_direct",
+      "humidity": "high",
+      "temperature": "warm",
+      "soil_type": "heavy",
+      "watering_frequency": "weekly",
+      "fertilizer_frequency": "monthly",
+      "success_rate": 0.6
+    },
+    {
+      "plant_type": "Pothos",
+      "environment": "indoor",
+      "light_level": "bright_indirect",
+      "humidity": "moderate",
+      "temperature": "warm",
+      "soil_type": "well_draining",
+      "watering_frequency": "weekly",
+      "fertilizer_frequency": "monthly",
+      "success_rate": 0.92
+    },
+    {
+      "plant_type": "Pothos",
+      "environment": "indoor",
+      "light_level": "low",
+      "humidity": "low",
+      "temperature": "cool",
+      "soil_type": "heavy",
+      "watering_frequency": "biweekly",
+      "fertilizer_frequency": "quarterly",
+      "success_rate": 0.7
+    },
+    {
+      "plant_type": "Succulent",
+      "environment": "outdoor",
+      "light_level": "bright_direct",
+      "humidity": "low",
+      "temperature": "warm",
+      "soil_type": "cactus_mix",
+      "watering_frequency": "monthly",
+      "fertilizer_frequency": "quarterly",
+      "success_rate": 0.88
+    },
+    {
+      "plant_type": "Succulent",
+      "environment": "indoor",
+      "light_level": "low",
+      "humidity": "high",
+      "temperature": "cool",
+      "soil_type": "heavy",
+      "watering_frequency": "weekly",
+      "fertilizer_frequency": "monthly",
+      "success_rate": 0.35
+    }
+  ],
+  "disease_diagnosis": [
+    {
+      "symptoms": "yellow_leaves, wilting, soft_stem",
+      "plant_type": "Monstera",
+      "environment": "indoor",
+      "care_history": "overwatering",
+      "diagnosis": "root_rot",
+      "confidence": 0.92,
+      "treatment": "repot, trim roots, reduce watering"
+    },
+    {
+      "symptoms": "brown_tips, crispy_leaves, slow_growth",
+      "plant_type": "Snake Plant",
+      "environment": "indoor",
+      "care_history": "underwatering",
+      "diagnosis": "dehydration",
+      "confidence": 0.88,
+      "treatment": "increase watering, check soil moisture"
+    },
+    {
+      "symptoms": "brown_spots, leaf_drop, no_growth",
+      "plant_type": "Fiddle Leaf Fig",
+      "environment": "indoor",
+      "care_history": "insufficient_light",
+      "diagnosis": "light_deficiency",
+      "confidence": 0.85,
+      "treatment": "move to brighter location, avoid direct sun"
+    },
+    {
+      "symptoms": "yellow_leaves, stunted_growth, pale_color",
+      "plant_type": "Monstera",
+      "environment": "indoor",
+      "care_history": "normal",
+      "diagnosis": "nutrient_deficiency",
+      "confidence": 0.78,
+      "treatment": "apply balanced fertilizer, check soil quality"
+    },
+    {
+      "symptoms": "leaf_drop, wilting, brown_edges",
+      "plant_type": "Pothos",
+      "environment": "indoor",
+      "care_history": "repotting",
+      "diagnosis": "transplant_shock",
+      "confidence": 0.82,
+      "treatment": "maintain consistent care, avoid overwatering"
+    },
+    {
+      "symptoms": "yellow_leaves, slow_growth, no_new_leaves",
+      "plant_type": "Snake Plant",
+      "environment": "indoor",
+      "care_history": "normal",
+      "diagnosis": "light_deficiency",
+      "confidence": 0.75,
+      "treatment": "move to brighter location, maintain care routine"
+    }
+  ],
+  "fertilizer_recommendations": [
+    {
+      "plant_type": "Monstera",
+      "season": "spring",
+      "soil_type": "well_draining",
+      "plant_age": "mature",
+      "growth_rate": "active",
+      "fertilizer_type": "balanced_20_20_20",
+      "frequency": "monthly",
+      "dilution": "half_strength",
+      "success_rate": 0.94
+    },
+    {
+      "plant_type": "Snake Plant",
+      "season": "summer",
+      "soil_type": "cactus_mix",
+      "plant_age": "mature",
+      "growth_rate": "slow",
+      "fertilizer_type": "cactus_fertilizer",
+      "frequency": "quarterly",
+      "dilution": "quarter_strength",
+      "success_rate": 0.89
+    },
+    {
+      "plant_type": "Succulent",
+      "season": "winter",
+      "soil_type": "cactus_mix",
+      "plant_age": "young",
+      "growth_rate": "dormant",
+      "fertilizer_type": "none",
+      "frequency": "none",
+      "dilution": "none",
+      "success_rate": 0.95
+    }
+  ],
+  "user_feedback": []
+}

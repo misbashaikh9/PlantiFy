@@ -150,6 +150,43 @@ export const suggestionAPI = {
   create: async (content) => {
     const response = await api.post('/suggestions/', { content });
     return response.data;
+  },
+  // Like a suggestion
+  like: async (suggestionId) => {
+    const response = await api.post(`/suggestions/${suggestionId}/like/`, { action: 'like' });
+    return response.data;
+  },
+  // Dislike a suggestion
+  dislike: async (suggestionId) => {
+    const response = await api.post(`/suggestions/${suggestionId}/like/`, { action: 'dislike' });
+    return response.data;
+  }
+};
+
+// Comments API calls
+export const commentAPI = {
+  // Like a comment
+  like: async (commentId) => {
+    const response = await api.post(`/comments/${commentId}/like/`, { action: 'like' });
+    return response.data;
+  },
+  // Dislike a comment
+  dislike: async (commentId) => {
+    const response = await api.post(`/comments/${commentId}/like/`, { action: 'dislike' });
+    return response.data;
+  },
+  // Create a reply to a suggestion
+  createReply: async (suggestionId, content) => {
+    const response = await api.post(`/suggestions/${suggestionId}/comments/`, { content });
+    return response.data;
+  },
+  // Create a reply to a comment
+  createNestedReply: async (commentId, content) => {
+    // For nested replies, we need to get the suggestion ID from the comment
+    // Since we don't have it directly, we'll need to modify the approach
+    // For now, let's use a different endpoint structure
+    const response = await api.post(`/comments/${commentId}/replies/`, { content });
+    return response.data;
   }
 };
 

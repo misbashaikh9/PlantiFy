@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User as DjangoUser
+from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
 
 # Create your models here.
 
@@ -147,6 +149,11 @@ class Product(models.Model):
 	def __str__(self):
 		return self.name
 	
+	@property
+	def image(self):
+		"""Return main_image for compatibility with existing code"""
+		return self.main_image if self.main_image else None
+	
 	class Meta:
 		verbose_name = "Product"
 		verbose_name_plural = "Products"
@@ -186,6 +193,11 @@ class CartItem(models.Model):
 		"""Calculate total price for this item (price × quantity)"""
 		price = self.product.sale_price if self.product.sale_price else self.product.price
 		return price * self.quantity
+	
+	@property
+	def product_name(self):
+		"""Return product name for consistency"""
+		return self.product.name
 	
 	class Meta:
 		verbose_name = "Cart Item"
@@ -231,6 +243,14 @@ class Order(models.Model):
 	
 	# Contact Information
 	contact_phone = models.CharField(max_length=15)
+	customer_email = models.EmailField(blank=True, null=True)
+	
+	# Payment Information
+	payment_method = models.CharField(max_length=20, choices=[
+		('card', 'Credit/Debit Card'),
+		('upi', 'UPI'),
+		('cod', 'Cash on Delivery'),
+	], default='cod')
 	
 	# Timestamps
 	created_at = models.DateTimeField(auto_now_add=True)
@@ -318,6 +338,10 @@ class CustomerSuggestion(models.Model):
 	updated_at = models.DateTimeField(auto_now=True)
 	is_public = models.BooleanField(default=True)
 	
+	# Like/Dislike fields
+	likes = models.PositiveIntegerField(default=0)
+	dislikes = models.PositiveIntegerField(default=0)
+	
 	def __str__(self):
 		return f"Suggestion by {self.user.username} on {self.created_at.strftime('%Y-%m-%d')}"
 	
@@ -325,3 +349,48 @@ class CustomerSuggestion(models.Model):
 		ordering = ['-created_at']
 		verbose_name = 'Customer Suggestion'
 		verbose_name_plural = 'Customer Suggestions'
+
+
+class Comment(models.Model):
+	"""Comments on suggestions and nested replies"""
+	suggestion = models.ForeignKey(CustomerSuggestion, on_delete=models.CASCADE, related_name='comments')
+	user = models.ForeignKey(DjangoUser, on_delete=models.CASCADE, related_name='comments')
+	content = models.TextField()
+	parent_comment = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='replies')
+	created_at = models.DateTimeField(auto_now_add=True)
+	updated_at = models.DateTimeField(auto_now=True)
+	
+	# Like/Dislike fields
+	likes = models.PositiveIntegerField(default=0)
+	dislikes = models.PositiveIntegerField(default=0)
+	
+	def __str__(self):
+		return f"Comment by {self.user.username} on {self.created_at.strftime('%Y-%m-%d')}"
+	
+	class Meta:
+		ordering = ['created_at']
+		verbose_name = 'Comment'
+		verbose_name_plural = 'Comments'
+
+
+class UserVote(models.Model):
+	"""Track individual user votes on suggestions and comments"""
+	VOTE_CHOICES = [
+		('like', 'Like'),
+		('dislike', 'Dislike'),
+	]
+	
+	user = models.ForeignKey(DjangoUser, on_delete=models.CASCADE, related_name='votes')
+	content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+	object_id = models.PositiveIntegerField()
+	content_object = GenericForeignKey('content_type', 'object_id')
+	vote_type = models.CharField(max_length=10, choices=VOTE_CHOICES)
+	created_at = models.DateTimeField(auto_now_add=True)
+	
+	class Meta:
+		unique_together = ['user', 'content_type', 'object_id']
+		verbose_name = 'User Vote'
+		verbose_name_plural = 'User Votes'
+	
+	def __str__(self):
+		return f"{self.user.username} {self.vote_type}d {self.content_object}"

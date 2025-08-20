@@ -71,8 +71,10 @@ const SigninPage = () => {
       // Call backend API
       const response = await authAPI.login(credentials);
       
-      // Store user data in localStorage (you might want to use a more secure method)
+      // Store user data and JWT token in localStorage
       localStorage.setItem('user', JSON.stringify(response.user));
+      localStorage.setItem('token', response.access_token);
+      localStorage.setItem('refresh_token', response.refresh_token);
       
       // Show success message
       await Swal.fire({
@@ -86,7 +88,7 @@ const SigninPage = () => {
       console.log('Login successful:', response);
 
       // Redirect to dashboard or home page
-      navigate('/home'); // You can change this to your desired route
+      navigate('/store'); // Redirect to store page after login
       
     } catch (error) {
       console.error('Login error:', error);

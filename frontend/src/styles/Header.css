@@ -33,7 +33,7 @@
   text-decoration: none;
   transition: all 0.3s ease;
   height: 70px;
-  margin-right: 40px;
+  margin-right: 50px;
   padding-left: 5px;
 }
 
@@ -56,6 +56,7 @@
   display: flex;
   align-items: center;
   height: 70px;
+  gap: 30px;
 }
 
 .nav-link {
@@ -63,15 +64,15 @@
   text-decoration: none;
   font-weight: 500;
   font-size: 1rem;
-  padding: 4px 12px;
-  border-radius: 6px;
+  padding: 8px 16px;
+  border-radius: 8px;
   transition: all 0.3s ease;
   position: relative;
   display: flex;
   align-items: center;
   height: auto;
-  min-height: 32px;
-  margin-right: 20px;
+  min-height: 36px;
+  margin-right: 0;
 }
 
 .nav-link:hover {
@@ -100,23 +101,34 @@
 
 .cart-link {
   position: relative;
+  display: flex;
+  align-items: center;
 }
 
-.cart-link::after {
-  content: '0';
-  position: absolute;
-  top: -8px;
-  right: -8px;
-  background: #e74c3c;
+.notification-badge {
+  background: #ff4757;
   color: white;
-  font-size: 0.7rem;
-  font-weight: 600;
-  width: 18px;
-  height: 18px;
+  padding: 4px;
   border-radius: 50%;
+  font-size: 0.65rem;
+  font-weight: 700;
+  min-width: 20px;
+  height: 20px;
+  text-align: center;
   display: flex;
   align-items: center;
   justify-content: center;
+  animation: notificationPulse 0.3s ease-in-out;
+  position: absolute;
+  top: -10px;
+  right: -15px;
+  line-height: 1;
+}
+
+@keyframes notificationPulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
 }
 
 .logout-btn {

@@ -1,6 +1,9 @@
 from django.contrib import admin
 from django.contrib.auth.models import User
-from .models import UserProfile, Category, Product, Cart, CartItem, Order, OrderItem, UserAddress, ContactMessage, CustomerSuggestion
+from .models import (
+    UserProfile, Category, Product, Cart, CartItem, Order, OrderItem, 
+    UserAddress, ContactMessage, CustomerSuggestion, Comment, UserVote
+)
 
 # Show UserProfile inside the Django User admin
 class UserProfileInline(admin.StackedInline):
@@ -133,13 +136,74 @@ class ContactMessageAdmin(admin.ModelAdmin):
 
 @admin.register(CustomerSuggestion)
 class CustomerSuggestionAdmin(admin.ModelAdmin):
-    list_display = ['user', 'content_preview', 'is_public', 'created_at']
-    list_filter = ['is_public', 'created_at']
-    search_fields = ['user__username', 'user__email', 'content']
-    readonly_fields = ['created_at', 'updated_at']
-    list_editable = ['is_public']
-    ordering = ['-created_at']
-    
-    def content_preview(self, obj):
-        return obj.content[:100] + '...' if len(obj.content) > 100 else obj.content
-    content_preview.short_description = 'Content Preview'
+	list_display = ['id', 'user', 'content_preview', 'comment_count', 'likes', 'dislikes', 'is_public', 'created_at']
+	list_filter = ['is_public', 'created_at', 'user']
+	search_fields = ['content', 'user__username']
+	readonly_fields = ['created_at', 'updated_at', 'likes', 'dislikes']
+	
+	def content_preview(self, obj):
+		return obj.content[:80] + '...' if len(obj.content) > 80 else obj.content
+	content_preview.short_description = 'Content Preview'
+	
+	def comment_count(self, obj):
+		return obj.comments.count()
+	comment_count.short_description = 'Comments'
+	
+	def get_queryset(self, request):
+		return super().get_queryset(request).select_related('user').prefetch_related('comments')
+
+
+@admin.register(Comment)
+class CommentAdmin(admin.ModelAdmin):
+	list_display = ['id', 'user', 'suggestion', 'content_preview', 'parent_comment_info', 'likes', 'dislikes', 'created_at']
+	list_filter = ['created_at', 'parent_comment', 'suggestion']
+	search_fields = ['content', 'user__username', 'suggestion__content']
+	readonly_fields = ['created_at', 'updated_at', 'likes', 'dislikes']
+	fieldsets = (
+		('Basic Info', {
+			'fields': ('user', 'suggestion', 'content')
+		}),
+		('Reply Settings', {
+			'fields': ('parent_comment',),
+			'description': 'Leave empty to reply to the suggestion, or select a comment to reply to it'
+		}),
+		('Votes', {
+			'fields': ('likes', 'dislikes'),
+			'classes': ('collapse',)
+		}),
+		('Timestamps', {
+			'fields': ('created_at', 'updated_at'),
+			'classes': ('collapse',)
+		}),
+	)
+	
+	def content_preview(self, obj):
+		return obj.content[:80] + '...' if len(obj.content) > 80 else obj.content
+	content_preview.short_description = 'Content Preview'
+	
+	def parent_comment_info(self, obj):
+		if obj.parent_comment:
+			return f"Reply to: {obj.parent_comment.content[:30]}..."
+		else:
+			return "Reply to Suggestion"
+	parent_comment_info.short_description = 'Parent Comment'
+	
+	def save_model(self, request, obj, form, change):
+		# Ensure parent_comment is properly set
+		if not obj.parent_comment:
+			# If no parent_comment set, it's a reply to the suggestion
+			obj.parent_comment = None
+		super().save_model(request, obj, form, change)
+	
+	def get_queryset(self, request):
+		return super().get_queryset(request).select_related('user', 'suggestion', 'parent_comment')
+
+@admin.register(UserVote)
+class UserVoteAdmin(admin.ModelAdmin):
+	list_display = ['user', 'vote_type', 'content_type', 'object_id', 'created_at']
+	list_filter = ['vote_type', 'content_type', 'created_at']
+	search_fields = ['user__username', 'user__email']
+	readonly_fields = ['created_at']
+	
+	def get_queryset(self, request):
+		return super().get_queryset(request).select_related('user', 'content_type')

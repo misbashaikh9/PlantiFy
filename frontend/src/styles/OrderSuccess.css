@@ -1,0 +1,640 @@
+/* Order Success Page Styles - Desktop First */
+.order-success-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  padding: 0; /* Remove side padding */
+  overflow-x: hidden; /* Prevent horizontal scroll */
+}
+
+.success-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 20px; /* Reduced side padding */
+}
+
+.success-content {
+  background: white;
+  border-radius: 30px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  position: relative;
+}
+
+/* Success Animation - Fixed Layout */
+.success-animation {
+  text-align: center;
+  padding: 40px 40px 60px; /* Adjusted padding for new layout */
+  background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+  position: relative;
+  overflow: hidden; /* Keep content within bounds */
+}
+
+.checkmark-circle {
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  background: white;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto; /* Centered horizontally */
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+  position: relative;
+  z-index: 2;
+}
+
+.checkmark {
+  font-size: 6rem;
+  color: #4CAF50;
+}
+
+/* Success Message - Now at top of green box */
+.success-message {
+  text-align: center;
+  padding: 0 20px 30px 20px; /* Added left/right padding to prevent overflow */
+  background: transparent; /* Transparent since it's inside green box */
+  position: relative;
+  z-index: 1;
+  margin-bottom: 20px; /* Space between message and checkmark */
+  max-width: 100%; /* Ensure content doesn't exceed container */
+  overflow: hidden; /* Prevent any content from overflowing */
+}
+
+.success-message h1 {
+  font-size: 3.5rem;
+  color: white; /* White text since it's on green background */
+  margin: 0 0 25px 0;
+  font-weight: 700;
+  line-height: 1.2;
+  word-wrap: break-word;
+  max-width: 100%; /* Ensure text doesn't exceed container */
+  overflow-wrap: break-word; /* Modern word wrapping */
+  hyphens: auto; /* Automatic hyphenation if needed */
+  padding: 0 10px; /* Add some padding to prevent edge touching */
+}
+
+.success-message p {
+  font-size: 1.6rem;
+  color: white; /* Changed to white to match the heading */
+  line-height: 1.6;
+  max-width: 100%; /* Ensure text doesn't exceed container */
+  margin: 0 auto;
+  word-wrap: break-word;
+  overflow-wrap: break-word; /* Modern word wrapping */
+  padding: 0 10px; /* Add some padding to prevent edge touching */
+}
+
+/* Order Details Card */
+.order-details-card {
+  margin: 0 50px 50px; /* Increased margins for desktop */
+  padding: 50px; /* Increased padding for desktop */
+  background: #f8f9fa;
+  border-radius: 25px; /* Larger radius for desktop */
+  border: 2px solid #e9ecef;
+}
+
+.order-details-card h2 {
+  font-size: 2.2rem; /* Larger for desktop */
+  color: #2c3e50;
+  margin-bottom: 35px; /* Increased margin for desktop */
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+/* Simplified Order Summary */
+.order-summary {
+  margin-bottom: 40px;
+  padding: 30px;
+  background: white;
+  border-radius: 20px;
+  border: 1px solid #e9ecef;
+}
+
+.order-summary h3 {
+  font-size: 1.5rem;
+  color: #2c3e50;
+  margin-bottom: 25px;
+  font-weight: 600;
+}
+
+.summary-info {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.summary-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  background: #f8f9fa;
+  border-radius: 12px;
+  border: 1px solid #e9ecef;
+}
+
+.summary-label {
+  font-weight: 600;
+  color: #495057;
+  font-size: 0.95rem;
+}
+
+.summary-value {
+  font-weight: 500;
+  color: #2c3e50;
+  font-size: 0.95rem;
+}
+
+.status-pending {
+  color: #ffc107;
+  font-weight: 600;
+}
+  align-items: center;
+  gap: 15px;
+}
+
+.section-icon {
+  color: #4CAF50;
+  font-size: 2rem; /* Larger icon for desktop */
+}
+
+.order-info-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 4 columns by default for desktop */
+  gap: 30px; /* Increased gap for desktop */
+}
+
+.order-info-item {
+  background: white;
+  padding: 25px; /* Increased padding for desktop */
+  border-radius: 18px; /* Larger radius for desktop */
+  border: 1px solid #e9ecef;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.order-info-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.info-label {
+  display: block;
+  font-size: 1rem;
+  color: #6c757d;
+  margin-bottom: 12px;
+  font-weight: 500;
+}
+
+.info-value {
+  display: block;
+  font-size: 1.4rem; /* Larger for desktop */
+  color: #2c3e50;
+  font-weight: 600;
+}
+
+.info-value.amount {
+  color: #4CAF50;
+  font-size: 1.6rem; /* Larger for desktop */
+  font-weight: 700;
+}
+
+/* Next Steps Card */
+.next-steps-card {
+  margin: 0 50px 50px; /* Increased margins for desktop */
+  padding: 50px; /* Increased padding for desktop */
+  background: #f8f9fa;
+  border-radius: 25px; /* Larger radius for desktop */
+  border: 2px solid #e9ecef;
+}
+
+.next-steps-card h3 {
+  font-size: 2.2rem; /* Larger for desktop */
+  color: #2c3e50;
+  margin-bottom: 40px; /* Increased margin for desktop */
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.steps-timeline {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 4 columns by default for desktop */
+  gap: 30px; /* Increased gap for desktop */
+}
+
+.step {
+  text-align: center;
+  background: white;
+  padding: 35px 25px; /* Increased padding for desktop */
+  border-radius: 20px; /* Larger radius for desktop */
+  border: 1px solid #e9ecef;
+  transition: all 0.3s ease;
+}
+
+.step:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+}
+
+.step-icon {
+  width: 80px; /* Larger for desktop */
+  height: 80px; /* Larger for desktop */
+  background: #4CAF50;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 25px; /* Increased margin for desktop */
+}
+
+.step-icon .material-icons {
+  font-size: 2.5rem; /* Larger icon for desktop */
+  color: white;
+}
+
+.step-content h4 {
+  font-size: 1.3rem; /* Larger for desktop */
+  color: #2c3e50;
+  margin-bottom: 15px; /* Increased margin for desktop */
+  font-weight: 600;
+}
+
+.step-content p {
+  font-size: 1.1rem; /* Larger for desktop */
+  color: #6c757d;
+  line-height: 1.5;
+}
+
+/* Action Buttons */
+.order-actions {
+  display: flex;
+  gap: 15px;
+  margin-top: 30px;
+  margin-bottom: 40px; /* Simple space below buttons */
+  justify-content: center; /* Center the buttons */
+  align-items: center;
+  flex-wrap: wrap;
+  padding: 0; /* Remove extra padding */
+}
+
+.btn {
+  min-width: 220px;
+  padding: 18px 32px;
+  font-size: 1.2rem;
+  border-radius: 16px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  font-weight: 600;
+  text-decoration: none;
+  margin: 0; /* Remove default margins */
+}
+
+.btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+.btn .material-icons {
+  font-size: 1.4rem; /* Larger icon for desktop */
+}
+
+.btn-primary {
+  background: #4CAF50;
+  color: white;
+}
+
+.btn-primary:hover {
+  background: #45a049;
+}
+
+.btn-secondary {
+  background: #2196F3;
+  color: white;
+}
+
+.btn-secondary:hover {
+  background: #1976D2;
+}
+
+.btn-outline {
+  background: transparent;
+  color: #4CAF50;
+  border: 2px solid #4CAF50;
+}
+
+.btn-outline:hover {
+  background: #4CAF50;
+  color: white;
+}
+
+/* Loading Message */
+.loading-message {
+  text-align: center;
+  padding: 100px 20px;
+  font-size: 1.5rem; /* Larger for desktop */
+  color: #6c757d;
+}
+
+/* Order Items List */
+.order-items-list {
+  margin-bottom: 30px;
+  background: white;
+  border-radius: 15px;
+  border: 1px solid #e9ecef;
+  overflow: hidden;
+}
+
+.order-items-list h3 {
+  background: #f8f9fa;
+  margin: 0;
+  padding: 20px;
+  font-size: 1.3rem;
+  color: #2c3e50;
+  border-bottom: 1px solid #e9ecef;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.order-items-list h3::before {
+  content: ""; /* Removed the shopping cart emoji */
+  font-size: 1.2rem;
+}
+
+.items-table {
+  padding: 0;
+}
+
+.items-header {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  background: #f8f9fa;
+  padding: 15px 20px;
+  font-weight: 600;
+  color: #2c3e50;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 2px solid #e9ecef;
+}
+
+.item-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  padding: 15px 20px;
+  border-bottom: 1px solid #f1f3f4;
+  align-items: center;
+  transition: background-color 0.2s ease;
+}
+
+.item-row:hover {
+  background-color: #f8f9fa;
+}
+
+.item-row:last-child {
+  border-bottom: none;
+}
+
+.item-name {
+  font-weight: 500;
+  color: #2c3e50;
+  font-size: 0.95rem;
+}
+
+.item-qty {
+  text-align: center;
+  color: #6c757d;
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.item-price {
+  text-align: right;
+  color: #2c3e50;
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.item-total {
+  text-align: right;
+  color: #4CAF50;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.no-items {
+  padding: 40px 20px;
+  text-align: center;
+  color: #6c757d;
+  font-style: italic;
+  background: #f8f9fa;
+}
+
+/* Responsive design for items table */
+@media (max-width: 768px) {
+  .items-header,
+  .item-row {
+    grid-template-columns: 1fr;
+    gap: 8px;
+    text-align: center;
+  }
+  
+  .items-header {
+    padding: 12px 15px;
+    font-size: 0.8rem;
+  }
+  
+  .item-row {
+    padding: 12px 15px;
+    border-bottom: 1px solid #e9ecef;
+  }
+  
+  .item-name {
+    font-weight: 600;
+    color: #2c3e50;
+    font-size: 1rem;
+    border-bottom: 1px solid #f1f3f4;
+    padding-bottom: 8px;
+  }
+  
+  .item-qty,
+  .item-price,
+  .item-total {
+    text-align: center;
+    font-size: 0.85rem;
+  }
+  
+  .item-total {
+    color: #4CAF50;
+    font-weight: 600;
+    font-size: 0.9rem;
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .success-container {
+    max-width: 1200px;
+    padding: 15px; /* Further reduced padding */
+  }
+  
+  .order-info-grid,
+  .steps-timeline {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px;
+  }
+}
+
+@media (max-width: 992px) {
+  .success-container {
+    max-width: 900px;
+    padding: 15px;
+  }
+  
+  .order-info-grid,
+  .steps-timeline {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+  
+  .success-message h1 {
+    font-size: 3rem;
+  }
+  
+  .success-message p {
+    font-size: 1.4rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .order-success-page {
+    padding: 0; /* No side padding on mobile */
+  }
+  
+  .success-container {
+    padding: 10px; /* Minimal padding on mobile */
+  }
+  
+  .success-content {
+    border-radius: 20px;
+  }
+  
+  .success-animation {
+    padding: 30px 15px 40px; /* Reduced side padding on mobile */
+  }
+  
+  .success-message {
+    padding: 0 15px 20px 15px; /* Adjusted padding for mobile */
+    margin-bottom: 15px;
+  }
+  
+  .success-message h1 {
+    font-size: 2.5rem; /* Smaller on mobile */
+    margin-bottom: 20px;
+    padding: 0 5px; /* Reduced padding on mobile */
+  }
+  
+  .success-message p {
+    font-size: 1.2rem; /* Smaller on mobile */
+    padding: 0 5px; /* Reduced padding on mobile */
+  }
+  
+  .checkmark-circle {
+    width: 140px; /* Smaller on mobile */
+    height: 140px;
+  }
+  
+  .checkmark {
+    font-size: 4.5rem; /* Smaller on mobile */
+  }
+  
+  .order-info-grid,
+  .steps-timeline {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  .order-details-card,
+  .next-steps-card {
+    margin: 0 15px 30px; /* Reduced side margins */
+    padding: 25px; /* Reduced padding */
+  }
+  
+  .order-actions {
+    padding: 20px 15px; /* Reduced padding */
+    gap: 15px;
+    justify-content: center; /* Ensure buttons stay centered */
+  }
+  
+  .btn {
+    min-width: 200px;
+    padding: 16px 28px;
+    font-size: 1.1rem;
+    margin: 0; /* Remove margins on mobile */
+  }
+}
+
+@media (max-width: 480px) {
+  .success-container {
+    padding: 5px; /* Minimal padding on very small screens */
+  }
+  
+  .success-content {
+    border-radius: 15px;
+  }
+  
+  .success-animation {
+    padding: 25px 10px 30px; /* Minimal side padding on small screens */
+  }
+  
+  .success-message {
+    padding: 0 10px 15px 10px; /* Minimal padding on small screens */
+    margin-bottom: 10px;
+  }
+  
+  .success-message h1 {
+    font-size: 2rem;
+    margin-bottom: 15px;
+    padding: 0 3px; /* Minimal padding on small screens */
+  }
+  
+  .success-message p {
+    font-size: 1rem;
+    padding: 0 3px; /* Minimal padding on small screens */
+  }
+  
+  .checkmark-circle {
+    width: 120px;
+    height: 120px;
+  }
+  
+  .checkmark {
+    font-size: 4rem;
+  }
+  
+  .order-details-card,
+  .next-steps-card {
+    margin: 0 10px 20px;
+    padding: 20px;
+  }
+  
+  .order-actions {
+    padding: 15px 10px; /* Minimal padding on small screens */
+    gap: 12px;
+    justify-content: center; /* Ensure buttons stay centered */
+  }
+  
+  .btn {
+    min-width: 180px;
+    padding: 14px 24px;
+    font-size: 1rem;
+    margin: 0; /* Remove margins on small screens */
+  }
+}

@@ -9,12 +9,13 @@ from django.db import transaction
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken
 from decimal import Decimal
-
-from .models import UserProfile, Category, Product, Cart, CartItem, Order, OrderItem, UserAddress, ContactMessage, CustomerSuggestion
+from django.contrib.contenttypes.models import ContentType
+from .models import UserProfile, Category, Product, Cart, CartItem, Order, OrderItem, UserAddress, ContactMessage, CustomerSuggestion, Comment, UserVote
 from .serializers import (
     UserSerializer, UserProfileSerializer, CategorySerializer, ProductSerializer,
     CartSerializer, CartItemSerializer, OrderSerializer, OrderItemSerializer,
-    UserRegistrationSerializer, LoginSerializer, UserAddressSerializer, ContactMessageSerializer, CustomerSuggestionSerializer
+    UserRegistrationSerializer, LoginSerializer, UserAddressSerializer, ContactMessageSerializer,
+    CustomerSuggestionSerializer, CommentSerializer
 )
 from .email_service import send_order_confirmation, send_contact_notification_email, send_contact_confirmation_email
 
@@ -171,6 +172,7 @@ class CartView(APIView):
             return Response({'error': 'Product not found'}, status=status.HTTP_404_NOT_FOUND)
         
         cart, created = Cart.objects.get_or_create(user=request.user)
+        print(f"CartView - Cart created: {created}, Cart ID: {cart.id}")  # Debug log
         
         # Check if item already in cart
         cart_item, created = CartItem.objects.get_or_create(
@@ -183,8 +185,27 @@ class CartView(APIView):
             cart_item.quantity += quantity
             cart_item.save()
         
+        print(f"CartView - Cart item created: {created}, Item ID: {cart_item.id}, Product: {product.name}")  # Debug log
+        
+        # Verify cart has items
+        cart.refresh_from_db()
+        print(f"CartView - Final cart items count: {cart.items.count()}")  # Debug log
+        
         serializer = CartSerializer(cart)
         return Response(serializer.data)
+    
+    def delete(self, request):
+        """Clear all items from cart"""
+        try:
+            cart = Cart.objects.get(user=request.user)
+            cart.items.all().delete()
+            print(f"CartView - Cart cleared for user {request.user.id}")  # Debug log
+            return Response({'message': 'Cart cleared successfully'}, status=status.HTTP_200_OK)
+        except Cart.DoesNotExist:
+            return Response({'message': 'Cart is already empty'}, status=status.HTTP_200_OK)
+        except Exception as e:
+            print(f"CartView - Error clearing cart: {str(e)}")  # Debug log
+            return Response({'error': 'Failed to clear cart'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 class CartItemUpdateView(APIView):
@@ -247,7 +268,13 @@ class CartSyncView(APIView):
             # Add new cart items
             for item_data in frontend_cart_items:
                 try:
-                    product = Product.objects.get(id=item_data['id'])
+                    # Handle both 'id' and 'product_id' fields for compatibility
+                    product_id = item_data.get('id') or item_data.get('product_id')
+                    if not product_id:
+                        print(f"No product ID found in item data: {item_data}")  # Debug log
+                        continue
+                        
+                    product = Product.objects.get(id=product_id)
                     cart_item = CartItem.objects.create(
                         cart=cart,
                         product=product,
@@ -255,7 +282,7 @@ class CartSyncView(APIView):
                     )
                     print(f"Created cart item: {cart_item.id} for product {product.name}")  # Debug log
                 except Product.DoesNotExist:
-                    print(f"Product not found: {item_data['id']}")  # Debug log
+                    print(f"Product not found: {product_id}")  # Debug log
                     continue
             
             # Verify cart was created with items
@@ -286,21 +313,28 @@ class OrderCreateView(APIView):
             cart, created = Cart.objects.get_or_create(user=request.user)
             print(f"Cart created: {created}, Cart ID: {cart.id}")  # Debug log
             
+            # Debug: Check all cart items for this user
+            all_cart_items = CartItem.objects.filter(cart__user=request.user)
+            print(f"All cart items for user {request.user.id}: {all_cart_items.count()}")
+            for item in all_cart_items:
+                print(f"  - Cart Item {item.id}: Product {item.product.name}, Quantity {item.quantity}")
+            
             cart_items = cart.items.all()
             print(f"Cart items count: {cart_items.count()}")  # Debug log
             
             if not cart_items.exists():
                 return Response({'error': 'Cart is empty'}, status=status.HTTP_400_BAD_REQUEST)
             
-            # Calculate totals
+            # Calculate totals with GST
             subtotal = sum(item.get_total_price() for item in cart_items)
-            print(f"Subtotal: {subtotal}, Type: {type(subtotal)}")  # Debug log
+            gst_rate = Decimal('0.08')  # 8% GST
+            gst_amount = subtotal * gst_rate
+            shipping_cost = Decimal('0.00')  # Free shipping
+            total_amount = subtotal + gst_amount + shipping_cost
             
-            tax = subtotal * Decimal('0.08')  # 8% tax
-            shipping_cost = Decimal('5.99') if subtotal < Decimal('50') else Decimal('0')  # Free shipping over $50
-            total_amount = subtotal + tax + shipping_cost
+            print(f"Subtotal: {subtotal}, GST (8%): {gst_amount}, Total: {total_amount}")  # Debug log
             
-            print(f"Tax: {tax}, Shipping: {shipping_cost}, Total: {total_amount}")  # Debug log
+            print(f"Final Total: {total_amount}, Tax: {gst_amount}, Shipping: {shipping_cost}")  # Debug log
             
             # Validate required shipping data
             required_fields = ['shipping_address', 'shipping_city', 'shipping_state', 'shipping_zip', 'shipping_country', 'contact_phone']
@@ -315,7 +349,7 @@ class OrderCreateView(APIView):
             order = Order.objects.create(
                 user=request.user,
                 subtotal=subtotal,
-                tax=tax,
+                tax=gst_amount,  # Store GST amount
                 shipping_cost=shipping_cost,
                 total_amount=total_amount,
                 shipping_address=request.data.get('shipping_address'),
@@ -323,21 +357,31 @@ class OrderCreateView(APIView):
                 shipping_state=request.data.get('shipping_state'),
                 shipping_zip=request.data.get('shipping_zip'),
                 shipping_country=request.data.get('shipping_country'),
-                contact_phone=request.data.get('contact_phone')
+                contact_phone=request.data.get('contact_phone'),
+                customer_email=request.data.get('customer_email', ''),
+                payment_method=request.data.get('payment_method', 'cod')
             )
             
             print(f"Order created with ID: {order.id}")  # Debug log
             
             # Create order items
             for cart_item in cart_items:
-                OrderItem.objects.create(
-                    order=order,
-                    product=cart_item.product,
-                    product_name=cart_item.product.name,
-                    quantity=cart_item.quantity,
-                    unit_price=cart_item.product.sale_price or cart_item.product.price,
-                    total_price=cart_item.get_total_price()
-                )
+                try:
+                    print(f"Creating order item for product: {cart_item.product.name}")  # Debug log
+                    print(f"Product image: {cart_item.product.image}")  # Debug log
+                    
+                    OrderItem.objects.create(
+                        order=order,
+                        product=cart_item.product,
+                        product_name=cart_item.product.name,
+                        quantity=cart_item.quantity,
+                        unit_price=cart_item.product.sale_price or cart_item.product.price,
+                        total_price=cart_item.get_total_price()
+                    )
+                    print(f"Order item created successfully for {cart_item.product.name}")  # Debug log
+                except Exception as e:
+                    print(f"Error creating order item for {cart_item.product.name}: {str(e)}")  # Debug log
+                    raise e
             
             print(f"Order items created: {order.items.count()}")  # Debug log
             
@@ -352,6 +396,8 @@ class OrderCreateView(APIView):
                 order_data = {
                     'order_number': order.order_number,
                     'order_date': order.created_at.strftime('%B %d, %Y'),
+                    'subtotal': f"₹{order.subtotal:,.2f}",
+                    'gst_amount': f"₹{order.tax:,.2f}",
                     'total_amount': f"₹{order.total_amount:,.2f}",
                     'payment_method': request.data.get('payment_method', 'Online Payment'),
                     'shipping_address': f"{order.shipping_address}, {order.shipping_city}, {order.shipping_state} {order.shipping_zip}, {order.shipping_country}",
@@ -551,11 +597,18 @@ class ContactFormView(APIView):
                 # Save contact message to database
                 contact_message = serializer.save()
                 
+                # Debug: Print contact message details
+                print(f"🔍 DEBUG: Contact message created with email: {contact_message.email}")
+                print(f"🔍 DEBUG: Contact message name: {contact_message.name}")
+                print(f"🔍 DEBUG: Contact message subject: {contact_message.subject}")
+                
                 # Send notification email to admin (you)
                 admin_email = 'plantify.orders@gmail.com'  # Your email
+                print(f"🔍 DEBUG: Sending admin notification to: {admin_email}")
                 send_contact_notification_email(contact_message, admin_email)
                 
                 # Send confirmation email to customer
+                print(f"🔍 DEBUG: About to send confirmation email to customer: {contact_message.email}")
                 send_contact_confirmation_email(contact_message)
                 
                 return Response({
@@ -783,6 +836,7 @@ class ProfileDetailView(APIView):
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
 
+
 class CustomerSuggestionListCreateView(APIView):
     """List all public suggestions; authenticated users can create suggestions"""
     permission_classes = [permissions.AllowAny]
@@ -807,3 +861,203 @@ class CustomerSuggestionListCreateView(APIView):
         )
         serializer = CustomerSuggestionSerializer(suggestion)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+
+class SuggestionLikeDislikeView(APIView):
+	"""Like or dislike a suggestion with toggle functionality"""
+	permission_classes = [IsAuthenticated]
+	
+	def post(self, request, suggestion_id):
+		try:
+			suggestion = CustomerSuggestion.objects.get(id=suggestion_id, is_public=True)
+			action = request.data.get('action')  # 'like' or 'dislike'
+			
+			if action not in ['like', 'dislike']:
+				return Response({'error': 'Invalid action'}, status=status.HTTP_400_BAD_REQUEST)
+			
+			# Check if user already voted
+			existing_vote = UserVote.objects.filter(
+				user=request.user,
+				content_type=ContentType.objects.get_for_model(CustomerSuggestion),
+				object_id=suggestion_id
+			).first()
+			
+			if existing_vote:
+				if existing_vote.vote_type == action:
+					# User is clicking the same button - remove the vote
+					if action == 'like':
+						suggestion.likes = max(0, suggestion.likes - 1)
+					else:
+						suggestion.dislikes = max(0, suggestion.dislikes - 1)
+					existing_vote.delete()
+					message = f'Removed {action}'
+				else:
+					# User is changing their vote - update counts
+					if existing_vote.vote_type == 'like':
+						suggestion.likes = max(0, suggestion.likes - 1)
+					else:
+						suggestion.dislikes = max(0, suggestion.dislikes - 1)
+					
+					if action == 'like':
+						suggestion.likes += 1
+					else:
+						suggestion.dislikes += 1
+					
+					existing_vote.vote_type = action
+					existing_vote.save()
+					message = f'Changed to {action}'
+			else:
+				# User is voting for the first time
+				if action == 'like':
+					suggestion.likes += 1
+				else:
+					suggestion.dislikes += 1
+				
+				UserVote.objects.create(
+					user=request.user,
+					content_type=ContentType.objects.get_for_model(CustomerSuggestion),
+					object_id=suggestion_id,
+					vote_type=action
+				)
+				message = f'{action.capitalize()}d successfully'
+			
+			suggestion.save()
+			
+			return Response({
+				'message': message,
+				'likes': suggestion.likes,
+				'dislikes': suggestion.dislikes,
+				'user_vote': action if existing_vote and existing_vote.vote_type == action else None
+			})
+				
+		except CustomerSuggestion.DoesNotExist:
+			return Response({'error': 'Suggestion not found'}, status=status.HTTP_404_NOT_FOUND)
+		except Exception as e:
+			return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+class CommentLikeDislikeView(APIView):
+	"""Like or dislike a comment with toggle functionality"""
+	permission_classes = [IsAuthenticated]
+	
+	def post(self, request, comment_id):
+		try:
+			comment = Comment.objects.get(id=comment_id)
+			action = request.data.get('action')  # 'like' or 'dislike'
+			
+			if action not in ['like', 'dislike']:
+				return Response({'error': 'Invalid action'}, status=status.HTTP_400_BAD_REQUEST)
+			
+			# Check if user already voted
+			existing_vote = UserVote.objects.filter(
+				user=request.user,
+				content_type=ContentType.objects.get_for_model(Comment),
+				object_id=comment_id
+			).first()
+			
+			if existing_vote:
+				if existing_vote.vote_type == action:
+					# User is clicking the same button - remove the vote
+					if action == 'like':
+						comment.likes = max(0, comment.likes - 1)
+					else:
+						comment.dislikes = max(0, comment.dislikes - 1)
+					existing_vote.delete()
+					message = f'Removed {action}'
+				else:
+					# User is changing their vote - update counts
+					if existing_vote.vote_type == 'like':
+						comment.likes = max(0, comment.likes - 1)
+					else:
+						comment.dislikes = max(0, comment.dislikes - 1)
+					
+					if action == 'like':
+						comment.likes += 1
+					else:
+						comment.dislikes += 1
+					
+					existing_vote.vote_type = action
+					existing_vote.save()
+					message = f'Changed to {action}'
+			else:
+				# User is voting for the first time
+				if action == 'like':
+					comment.likes += 1
+				else:
+					comment.dislikes += 1
+				
+				UserVote.objects.create(
+					user=request.user,
+					content_type=ContentType.objects.get_for_model(Comment),
+					object_id=comment_id,
+					vote_type=action
+				)
+				message = f'{action.capitalize()}d successfully'
+			
+			comment.save()
+			
+			return Response({
+				'message': message,
+				'likes': comment.likes,
+				'dislikes': comment.dislikes,
+				'user_vote': action if existing_vote and existing_vote.vote_type == action else None
+			})
+				
+		except Comment.DoesNotExist:
+			return Response({'error': 'Comment not found'}, status=status.HTTP_404_NOT_FOUND)
+		except Exception as e:
+			return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+class CommentCreateView(APIView):
+    """Create a comment on a suggestion or reply to a comment"""
+    permission_classes = [IsAuthenticated]
+    
+    def post(self, request, suggestion_id=None, comment_id=None):
+        try:
+            content = request.data.get('content', '')
+            
+            if not content or len(content.strip()) < 3:
+                return Response({'error': 'Please write a longer comment.'}, status=status.HTTP_400_BAD_REQUEST)
+            
+            # Determine if this is a reply to a comment or a new comment on a suggestion
+            if comment_id:
+                # This is a reply to a comment
+                try:
+                    parent_comment = Comment.objects.get(id=comment_id)
+                    suggestion = parent_comment.suggestion
+                except Comment.DoesNotExist:
+                    return Response({'error': 'Parent comment not found'}, status=status.HTTP_404_NOT_FOUND)
+            elif suggestion_id:
+                # This is a new comment on a suggestion
+                try:
+                    suggestion = CustomerSuggestion.objects.get(id=suggestion_id, is_public=True)
+                    parent_comment = None
+                except CustomerSuggestion.DoesNotExist:
+                    return Response({'error': 'Suggestion not found'}, status=status.HTTP_404_NOT_FOUND)
+            else:
+                return Response({'error': 'Either suggestion_id or comment_id is required'}, status=status.HTTP_400_BAD_REQUEST)
+            
+            comment = Comment.objects.create(
+                user=request.user,
+                suggestion=suggestion,
+                content=content.strip(),
+                parent_comment=parent_comment
+            )
+            
+            # Return comment data
+            return Response({
+                'id': comment.id,
+                'content': comment.content,
+                'user': {
+                    'first_name': comment.user.first_name,
+                    'username': comment.user.username
+                },
+                'created_at': comment.created_at,
+                'likes': comment.likes,
+                'dislikes': comment.dislikes,
+                'parent_comment_id': parent_comment.id if parent_comment else None
+            }, status=status.HTTP_201_CREATED)
+            
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

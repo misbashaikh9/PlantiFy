@@ -1,21 +1,48 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { authAPI } from '../services/api';
+import { cartService } from '../services/cartService';
 import '../styles/Header.css';
 
 const Header = () => {
   const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem('user') || 'null');
+  const [cartCount, setCartCount] = useState(0);
+
+  // Cart count update from database
+  useEffect(() => {
+    const updateCartCount = async () => {
+      try {
+        const count = await cartService.getCartCount();
+        setCartCount(count);
+      } catch (error) {
+        console.error('Error fetching cart count:', error);
+        // Fallback to cache if API fails
+        const count = cartService.getCartCountFromCache();
+        setCartCount(count);
+      }
+    };
+
+    updateCartCount();
+    
+    // Listen for cart updates
+    window.addEventListener('cartUpdated', updateCartCount);
+    
+    return () => {
+      window.removeEventListener('cartUpdated', updateCartCount);
+    };
+  }, []);
 
   const handleLogout = async () => {
     try {
       await authAPI.logout();
-      localStorage.removeItem('user');
-      navigate('/signin');
     } catch (error) {
       console.error('Logout error:', error);
-      // Force logout even if API call fails
+    } finally {
+      // Clear all authentication data
       localStorage.removeItem('user');
+      localStorage.removeItem('token');
+      localStorage.removeItem('refresh_token');
       navigate('/signin');
     }
   };
@@ -34,8 +61,8 @@ const Header = () => {
           <nav className="nav-menu">
             <Link to="/home" className="nav-link">Home</Link>
             <Link to="/store" className="nav-link">Store</Link>
-            <Link to="/ai-care" className="nav-link">AI Care</Link>
-            <Link to="/care-tips" className="nav-link">Care Tips</Link>
+                    <Link to="/ai-care" className="nav-link">AI Care</Link>
+        <Link to="/about-us" className="nav-link">About Us</Link>
           </nav>
         </div>
         
@@ -43,6 +70,11 @@ const Header = () => {
           <div className="user-menu">
             <Link to="/cart" className="nav-link cart-link">
               🛒 Cart
+              {cartCount > 0 && (
+                <span className="notification-badge">
+                  {cartCount}
+                </span>
+              )}
             </Link>
             <Link to="/profile" className="nav-link">
               👤 {user.username}

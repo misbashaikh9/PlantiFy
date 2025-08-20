@@ -11,6 +11,7 @@
   width: 100%;
   margin: 0;
   padding: 40px 60px 60px 60px;
+  background: transparent;
 }
 
 /* Welcome Section */
@@ -91,6 +92,14 @@
   transition: all 0.3s ease;
 }
 
+.ai-chat-icon:hover {
+  transform: scale(1.1);
+}
+
+.ai-chat-icon:active {
+  transform: scale(0.95);
+}
+
 .ai-icon-circle {
   width: 60px;
   height: 60px;
@@ -160,6 +169,33 @@
   padding: 0 0;
 }
 
+/* Container for both boxes to be inline */
+.magazine-boxes-container {
+  display: flex;
+  gap: 30px;
+  justify-content: center;
+  align-items: stretch;
+  margin: 0;
+  padding: 0 40px;
+  background: transparent;
+}
+
+.magazine-boxes-container .magazine-section {
+  flex: 1;
+  margin: 0;
+  max-width: 400px;
+  min-width: 350px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Hide the header text above the boxes */
+.magazine-boxes-container .magazine-section h2,
+.magazine-boxes-container .magazine-section p {
+  display: none;
+}
+
 .magazine-section h2 {
   text-align: center;
   font-size: 2.5rem;
@@ -178,39 +214,26 @@
 /* Big Magazine Box */
 .big-magazine-box {
   background: linear-gradient(135deg, #4CAF50 0%, #45a049 50%, #2E7D32 100%);
-  border-radius: 18px;
-  padding: 60px;
+  border-radius: 20px;
+  padding: 40px;
   text-align: center;
   color: white;
   cursor: pointer;
   transition: all 0.4s ease;
-  box-shadow: 0 15px 40px rgba(76, 175, 80, 0.3);
-  border: 3px solid transparent;
+  box-shadow: 0 8px 25px rgba(76, 175, 80, 0.3);
+  border: none;
   position: relative;
   overflow: hidden;
   width: 100%;
-  min-height: 320px; /* rectangular */
+  height: 280px;
   display: flex;
   align-items: center;
   justify-content: center;
+  margin: 0;
+  flex: 1;
 }
 
-.big-magazine-box::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(135deg, #66BB6A 0%, #4CAF50 50%, #388E3C 100%);
-  opacity: 0;
-  transition: opacity 0.4s ease;
-  z-index: 1;
-}
 
-.big-magazine-box:hover::before {
-  opacity: 1;
-}
 
 .big-magazine-box:hover {
   transform: translateY(-8px);
@@ -233,16 +256,18 @@
   display: block;
 }
 
-.big-magazine-box h3 {
-  font-size: 2.2rem;
+.big-magazine-box h3,
+.big-suggestion-box h3 {
+  font-size: 1.8rem;
   font-weight: 700;
   margin-bottom: 15px;
   color: white;
 }
 
-.big-magazine-box p {
-  font-size: 1.3rem;
-  margin-bottom: 30px;
+.big-magazine-box p,
+.big-suggestion-box p {
+  font-size: 1.1rem;
+  margin-bottom: 20px;
   opacity: 0.9;
   line-height: 1.6;
 }
@@ -266,36 +291,28 @@
 /* Big Suggestion Box */
 .big-suggestion-box {
   background: linear-gradient(135deg, #6a5acd 0%, #7e57c2 40%, #3949ab 100%);
-  border-radius: 18px;
-  padding: 60px;
+  border-radius: 20px;
+  padding: 40px;
   text-align: center;
   color: white;
   cursor: pointer;
   transition: all 0.4s ease;
-  box-shadow: 0 15px 40px rgba(106, 90, 205, 0.3);
-  border: 3px solid transparent;
+  box-shadow: 0 8px 25px rgba(106, 90, 205, 0.3);
+  border: none;
   position: relative;
   overflow: hidden;
   width: 100%;
-  min-height: 320px;
+  height: 280px;
   display: flex;
   align-items: center;
   justify-content: center;
+  margin: 0;
+  flex: 1;
 }
 
-.big-suggestion-box::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, #8e79ff 0%, #7c6be6 40%, #536dfe 100%);
-  opacity: 0;
-  transition: opacity 0.4s ease;
-  z-index: 1;
-}
 
-.big-suggestion-box:hover::before {
-  opacity: 1;
-}
+
+
 
 .big-suggestion-box:hover {
   transform: translateY(-8px);
@@ -308,15 +325,33 @@
   z-index: 2;
 }
 
+/* Ensure all text in suggestion box is white */
+.big-suggestion-box h3,
+.big-suggestion-box p,
+.big-suggestion-box .click-hint {
+  color: white !important;
+}
+
 /* Responsive Design */
 @media (max-width: 1024px) {
+  .magazine-boxes-container {
+    flex-direction: column;
+    align-items: center;
+    gap: 40px;
+  }
+  
+  .magazine-boxes-container .magazine-section {
+    max-width: 500px;
+    width: 100%;
+  }
+  
   .big-magazine-box {
     padding: 50px;
-    min-height: 280px;
+    height: 280px;
   }
   .big-suggestion-box {
     padding: 50px;
-    min-height: 280px;
+    height: 280px;
   }
 }
 

@@ -12,6 +12,8 @@ import ContactUs from './components/ContactUs';
 import ProfilePage from './components/ProfilePage';
 import MagazinePage from './components/MagazinePage';
 import SuggestionsPage from './components/SuggestionsPage';
+import AICarePage from './components/AICarePage';
+import AboutUsPage from './components/AboutUsPage';
 import './styles/index.css';
 
 function App() {
@@ -31,6 +33,8 @@ function App() {
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/magazine" element={<MagazinePage />} />
           <Route path="/suggestions" element={<SuggestionsPage />} />
+          <Route path="/ai-care" element={<AICarePage />} />
+        <Route path="/about-us" element={<AboutUsPage />} />
           <Route path="/" element={<Navigate to="/home" replace />} />
         </Routes>
       </div>

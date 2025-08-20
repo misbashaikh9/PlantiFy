@@ -497,15 +497,15 @@
                     <div class="receipt-summary">
                         <div class="summary-row">
                             <span class="summary-label">Subtotal:</span>
-                            <span class="summary-value">₹{{ total_amount }}</span>
+                            <span class="summary-value">₹{{ subtotal }}</span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="summary-label">GST (8%):</span>
+                            <span class="summary-value">₹{{ gst_amount }}</span>
                         </div>
                         <div class="summary-row">
                             <span class="summary-label">Shipping:</span>
                             <span class="summary-value">Free</span>
-                        </div>
-                        <div class="summary-row">
-                            <span class="summary-label">Tax:</span>
-                            <span class="summary-value">Included</span>
                         </div>
                         <div class="summary-row total">
                             <span class="summary-label">Total Amount:</span>

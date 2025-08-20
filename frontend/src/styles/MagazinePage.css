@@ -1,16 +1,18 @@
 /* Magazine Page Container */
 .magazine-page {
   min-height: 100vh;
-  width: 100vw;
+  width: 100%;
   background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
   position: relative;
+  overflow-x: hidden;
 }
 
 /* Main Content */
 .magazine-main {
   width: 100%;
   margin: 0;
-  padding: 40px 60px 60px 60px;
+  padding: 40px 20px 60px 20px;
+  box-sizing: border-box;
 }
 
 /* Magazine Header */
@@ -19,12 +21,13 @@
   max-width: 800px;
   margin: 0 auto 60px auto;
   padding: 40px 20px;
+  position: relative;
 }
 
 .back-btn {
   position: absolute;
-  left: 60px;
-  top: 100px;
+  left: 20px;
+  top: 40px;
   padding: 12px 20px;
   background: white;
   color: #4CAF50;
@@ -36,6 +39,7 @@
   transition: all 0.3s ease;
   text-decoration: none;
   display: inline-block;
+  z-index: 10;
 }
 
 .back-btn:hover {
@@ -45,8 +49,12 @@
   box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
 }
 
+.back-btn:active {
+  transform: translateY(0);
+}
+
 .magazine-header h1 {
-  font-size: 3.5rem;
+  font-size: clamp(2rem, 6vw, 3.5rem);
   font-weight: 700;
   color: #2c3e50;
   margin-bottom: 20px;
@@ -54,7 +62,7 @@
 }
 
 .magazine-header p {
-  font-size: 1.4rem;
+  font-size: clamp(1rem, 3vw, 1.4rem);
   color: #5a6c7d;
   margin-bottom: 40px;
   line-height: 1.6;
@@ -64,15 +72,17 @@
 .magazine-content {
   max-width: 1200px;
   margin: 0 auto;
+  padding: 0;
 }
 
 /* Magazine Section */
 .magazine-section {
-  margin-bottom: 80px;
+  margin-bottom: 60px;
   background: white;
   border-radius: 25px;
-  padding: 40px;
+  padding: clamp(20px, 4vw, 40px);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
 }
 
 .section-header {
@@ -82,12 +92,13 @@
   margin-bottom: 40px;
   padding-bottom: 20px;
   border-bottom: 3px solid #e9ecef;
+  flex-wrap: wrap;
 }
 
 .section-icon {
-  font-size: 3rem;
-  width: 80px;
-  height: 80px;
+  font-size: clamp(2rem, 5vw, 3rem);
+  width: clamp(60px, 8vw, 80px);
+  height: clamp(60px, 8vw, 80px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -98,27 +109,49 @@
 }
 
 .section-header h2 {
-  font-size: 2.5rem;
+  font-size: clamp(1.8rem, 4vw, 2.5rem);
   font-weight: 700;
   color: #2c3e50;
   margin: 0;
+  line-height: 1.3;
+}
+
+/* Special styling for suggestions section header */
+.magazine-section .section-header h2 {
+  color: #ffffff !important;
+}
+
+/* Specific styling for suggestions title */
+.suggestions-title {
+  color: #ffffff !important;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+/* Special background for suggestions section */
+.suggestions-section {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
 }
 
 /* Content Grid */
 .content-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 30px;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: clamp(15px, 3vw, 30px);
+  width: 100%;
 }
 
 /* Content Cards */
 .content-card {
   background: #f8f9fa;
-  padding: 25px;
+  padding: clamp(15px, 3vw, 25px);
   border-radius: 20px;
   border-left: 5px solid #4CAF50;
   transition: all 0.3s ease;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  box-sizing: border-box;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .content-card:hover {
@@ -127,26 +160,32 @@
   background: white;
 }
 
+.content-card:active {
+  transform: translateY(-2px);
+}
+
 .content-card h3 {
-  font-size: 1.3rem;
+  font-size: clamp(1.1rem, 2.5vw, 1.3rem);
   font-weight: 600;
   color: #2c3e50;
   margin-bottom: 20px;
   display: flex;
   align-items: center;
   gap: 10px;
+  line-height: 1.3;
 }
 
 .content-card ul {
   list-style: none;
   padding: 0;
   margin: 0;
+  flex: 1;
 }
 
 .content-card li {
   padding: 10px 0;
   border-bottom: 1px solid #e9ecef;
-  font-size: 1rem;
+  font-size: clamp(0.9rem, 2.5vw, 1rem);
   color: #5a6c7d;
   line-height: 1.6;
 }
@@ -177,13 +216,15 @@
   resize: vertical;
   outline: none;
   transition: border 0.2s ease, box-shadow 0.2s ease;
-  background: #ffffff; /* ensure white bg */
-  color: #111111; /* black text */
-  caret-color: #111111;
+  background: #ffffff;
+  color: #2c3e50;
+  caret-color: #2c3e50;
+  box-sizing: border-box;
+  min-height: 100px;
 }
 
 .suggestion-input::placeholder {
-  color: #94a3b8; /* subtle gray placeholder */
+  color: #94a3b8;
 }
 
 .suggestion-input:focus {
@@ -201,11 +242,16 @@
   font-weight: 600;
   cursor: pointer;
   transition: transform 0.15s ease, box-shadow 0.2s ease;
+  font-size: 1rem;
 }
 
 .suggestion-submit:hover {
   transform: translateY(-1px);
   box-shadow: 0 6px 18px rgba(76, 175, 80, 0.25);
+}
+
+.suggestion-submit:active {
+  transform: translateY(0);
 }
 
 .suggestion-submit:disabled {
@@ -229,6 +275,7 @@
   border-radius: 16px;
   padding: 16px;
   border-left: 4px solid #4CAF50;
+  box-sizing: border-box;
 }
 
 .suggestion-header {
@@ -236,6 +283,7 @@
   align-items: center;
   gap: 12px;
   margin-bottom: 10px;
+  flex-wrap: wrap;
 }
 
 .user-avatar {
@@ -247,16 +295,20 @@
   align-items: center;
   justify-content: center;
   font-size: 18px;
+  flex-shrink: 0;
 }
 
 .user-info {
   display: flex;
   flex-direction: column;
+  min-width: 0;
+  flex: 1;
 }
 
 .user-name {
   font-weight: 600;
   color: #2c3e50;
+  font-size: 0.95rem;
 }
 
 .suggestion-date {
@@ -266,35 +318,43 @@
 
 .suggestion-content {
   font-size: 1rem;
-  color: #1f2937; /* dark text */
+  color: #1f2937;
   line-height: 1.6;
   white-space: pre-wrap;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .empty-state {
   text-align: center;
   color: #8391a1;
+  padding: 40px 20px;
 }
 
 /* Responsive Design */
 @media (max-width: 1024px) {
   .magazine-main {
-    padding: 30px 40px 50px 40px;
+    padding: 30px 20px 50px 20px;
   }
   
   .magazine-section {
-    padding: 30px;
+    padding: clamp(20px, 3vw, 30px);
   }
   
   .content-grid {
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 25px;
+    gap: 20px;
+  }
+  
+  .back-btn {
+    left: 20px;
+    top: 30px;
   }
 }
 
 @media (max-width: 768px) {
   .magazine-main {
-    padding: 20px 30px 40px 30px;
+    padding: 20px 15px 40px 15px;
   }
   
   .magazine-header {
@@ -307,56 +367,15 @@
     left: auto;
     top: auto;
     margin-bottom: 20px;
+    align-self: flex-start;
   }
   
   .magazine-header h1 {
-    font-size: 2.5rem;
+    font-size: clamp(1.8rem, 5vw, 2.5rem);
   }
   
   .magazine-header p {
-    font-size: 1.2rem;
-  }
-  
-  .section-header h2 {
-    font-size: 2rem;
-  }
-  
-  .section-icon {
-    font-size: 2.5rem;
-    width: 60px;
-    height: 60px;
-  }
-  
-  .magazine-section {
-    padding: 25px;
-    margin-bottom: 50px;
-  }
-  
-  .content-grid {
-    grid-template-columns: 1fr;
-    gap: 20px;
-  }
-  
-  .content-card {
-    padding: 20px;
-  }
-}
-
-@media (max-width: 480px) {
-  .magazine-main {
-    padding: 15px 20px 30px 20px;
-  }
-  
-  .magazine-header {
-    padding: 20px 10px;
-  }
-  
-  .magazine-header h1 {
-    font-size: 2rem;
-  }
-  
-  .magazine-header p {
-    font-size: 1.1rem;
+    font-size: clamp(1rem, 2.5vw, 1.2rem);
   }
   
   .section-header {
@@ -366,22 +385,172 @@
   }
   
   .section-header h2 {
-    font-size: 1.8rem;
+    font-size: clamp(1.5rem, 4vw, 2rem);
+  }
+  
+  .section-icon {
+    font-size: clamp(2rem, 5vw, 2.5rem);
+    width: clamp(50px, 8vw, 60px);
+    height: clamp(50px, 8vw, 60px);
   }
   
   .magazine-section {
-    padding: 20px;
+    padding: clamp(20px, 3vw, 25px);
+    margin-bottom: 40px;
+  }
+  
+  .content-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
   }
   
   .content-card {
-    padding: 15px;
+    padding: clamp(15px, 3vw, 20px);
+  }
+  
+  .suggestion-input {
+    min-height: 80px;
+  }
+}
+
+@media (max-width: 480px) {
+  .magazine-main {
+    padding: 15px 10px 30px 10px;
+  }
+  
+  .magazine-header {
+    padding: 20px 10px;
+  }
+  
+  .magazine-header h1 {
+    font-size: clamp(1.5rem, 5vw, 2rem);
+  }
+  
+  .magazine-header p {
+    font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+  }
+  
+  .section-header {
+    gap: 12px;
+  }
+  
+  .section-header h2 {
+    font-size: clamp(1.3rem, 4vw, 1.8rem);
+  }
+  
+  .magazine-section {
+    padding: clamp(15px, 3vw, 20px);
+    margin-bottom: 30px;
+    border-radius: 20px;
+  }
+  
+  .content-card {
+    padding: clamp(12px, 3vw, 15px);
+    border-radius: 15px;
   }
   
   .content-card h3 {
-    font-size: 1.1rem;
+    font-size: clamp(1rem, 2.5vw, 1.1rem);
   }
   
   .content-card li {
+    font-size: clamp(0.85rem, 2.5vw, 0.95rem);
+    padding: 8px 0;
+  }
+  
+  .suggestion-input {
+    padding: 12px 14px;
     font-size: 0.95rem;
+    min-height: 70px;
+  }
+  
+  .suggestion-submit {
+    padding: 8px 16px;
+    font-size: 0.95rem;
+  }
+}
+
+/* Touch device optimizations */
+@media (hover: none) and (pointer: coarse) {
+  .content-card:hover {
+    transform: none;
+  }
+  
+  .content-card:active {
+    transform: scale(0.98);
+  }
+  
+  .back-btn:hover {
+    transform: none;
+  }
+  
+  .back-btn:active {
+    transform: scale(0.95);
+  }
+  
+  .suggestion-submit:hover {
+    transform: none;
+  }
+  
+  .suggestion-submit:active {
+    transform: scale(0.95);
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .content-card {
+    border: 2px solid #000;
+  }
+  
+  .section-header {
+    border-bottom-color: #000;
+  }
+  
+  .suggestion-input {
+    border-color: #000;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .content-card,
+  .back-btn,
+  .suggestion-submit {
+    transition: none;
+  }
+  
+  .content-card:hover {
+    transform: none;
+  }
+  
+  .back-btn:hover {
+    transform: none;
+  }
+  
+  .suggestion-submit:hover {
+    transform: none;
+  }
+}
+
+/* Print styles */
+@media print {
+  .back-btn {
+    display: none;
+  }
+  
+  .magazine-page {
+    background: white;
+  }
+  
+  .magazine-section {
+    box-shadow: none;
+    border: 1px solid #ccc;
+    break-inside: avoid;
+  }
+  
+  .content-card {
+    box-shadow: none;
+    border: 1px solid #eee;
   }
 }
